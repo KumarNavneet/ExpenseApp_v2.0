@@ -76,7 +76,7 @@
             android:textStyle="bold"
             android:typeface="serif"
             android:textSize="18dp"
-            android:text="Division"
+            android:text="Div."
             android:gravity="center"
             android:background="@drawable/cell_shape"></TextView>
     </TableRow>

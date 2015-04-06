@@ -20,6 +20,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 //import android.support.v4.app.Fragment;
@@ -50,6 +51,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.salesforce.androidsdk.app.SalesforceSDKManager;
 import com.salesforce.androidsdk.rest.RestClient;
 import com.salesforce.androidsdk.rest.RestClient.AsyncRequestCallback;
 import com.salesforce.androidsdk.rest.RestRequest;
@@ -94,15 +96,16 @@ public class MainActivity extends SalesforceActivity {
 	private static boolean readytoStore = false;
 	private static ProgressDialog progress;
 	private InputMethodManager imm;
-	// private TextView recentEntries;
-	// private ListView entries;
 	private EntryRowAdapter entriesAdapter;
 	public static ArrayList<EntryRow> RowEntries;
+	private static Typeface tf = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_activity);
+		
+		tf = Typeface.SERIF;
 
 		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		mTitle = mDrawerTitle = getTitle();
@@ -152,16 +155,10 @@ public class MainActivity extends SalesforceActivity {
 
 		apiVersion = getString(R.string.api_version);
 
-		// recentEntries = (TextView) findViewById(R.id.textView7);
-		// entries = (ListView) findViewById(R.id.RecentEntriesList);
-		// RowEntries = new ArrayList<EntryRow>();
 		progress = new ProgressDialog(this);
 
 		progress.setCancelable(true);
 		progress.setIndeterminate(true);
-
-		// entriesAdapter = new EntryRowAdapter(this, RowEntries);
-		// entries.setAdapter(entriesAdapter);
 
 	}
 
@@ -202,6 +199,19 @@ public class MainActivity extends SalesforceActivity {
 		}
 
 		case R.id.allEntries: {
+			progress.setTitle("Fetching Entries...");
+			progress.setMessage("Please wait...");
+			progress.show();
+			try {
+				String soql = "SELECT Date__c, Description__c, DivisibleAmong__c, PaidBy__c, TotalAmount__c, ID FROM MainTable__c";
+				final RestRequest restRequest = RestRequest.getRequestForQuery(
+						getString(R.string.api_version), soql);
+				sendRequest(restRequest, "Retrieve", null, getApplicationContext());
+				imm.hideSoftInputFromWindow(details.getWindowToken(), 0);
+				imm.hideSoftInputFromWindow(amount.getWindowToken(), 0);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 			break;
 		}
 		case R.id.myEntries: {
@@ -246,7 +256,7 @@ public class MainActivity extends SalesforceActivity {
 
 		// update selected item and title, then close the drawer
 		mDrawerList.setItemChecked(position, true);
-		setTitle(mDrawerItemTitles[position]);
+		setTitle(mDrawerItemTitles[position].toUpperCase());
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 
@@ -398,7 +408,6 @@ public class MainActivity extends SalesforceActivity {
 							fields.put("Description__c", detail.toString());
 							fields.put("PaidBy__c", PaidBy);
 							fields.put("DivisibleAmong__c", names.size());
-							// RestRequest request2 = null;
 							try {
 								request = RestRequest.getRequestForCreate(
 										apiVersion, objectType, fields);
@@ -419,13 +428,28 @@ public class MainActivity extends SalesforceActivity {
 					}
 				});
 
-			} else {
+			} else if(frag_to_show.equals("recent")|| frag_to_show.equals("all")) {
 				progress.setTitle("Fetching Entries...");
 				progress.setMessage("Please wait...");
 				progress.show();
 				
 				try {
 					String soql = "SELECT Date__c, Description__c, DivisibleAmong__c, PaidBy__c, TotalAmount__c, ID FROM MainTable__c";
+					final RestRequest restRequest = RestRequest
+							.getRequestForQuery(
+									getString(R.string.api_version), soql);
+					sendRequest(restRequest, "Retrieve", rootView, getActivity().getApplicationContext());
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+			}
+			else{
+				progress.setTitle("Fetching Entries...");
+				progress.setMessage("Please wait...");
+				progress.show();
+				
+				try {
+					String soql = "SELECT Date__c, Description__c, DivisibleAmong__c, PaidBy__c, TotalAmount__c, ID FROM MainTable__c WHERE PaidBy__c = 'Navneet'";
 					final RestRequest restRequest = RestRequest
 							.getRequestForQuery(
 									getString(R.string.api_version), soql);
@@ -509,61 +533,59 @@ public class MainActivity extends SalesforceActivity {
 							tr.setBackgroundColor(Color.BLACK);
 							tr.setPadding(0, 0, 0, 2); //Border between rows
 
-							TableRow.LayoutParams llp = new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+							TableRow.LayoutParams llp = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
 							llp.setMargins(0, 0, 2, 0);//2px right-margin
 
 							LinearLayout cell;
 							TextView tv;
 							//New Cell
 							cell = new LinearLayout(ctx);
-							cell.setBackgroundColor(Color.WHITE);
+							cell.setBackgroundColor(Color.GRAY);
 							cell.setLayoutParams(llp);//2px border on the right for the cell
 							tv = new TextView(ctx);
+							tv.setTypeface(tf);
 							tv.setText(entry.getDate());
-							tv.setPadding(0, 0, 4, 3);
+							//tv.setPadding(0, 0, 4, 3);
 							cell.addView(tv);
 							tr.addView(cell);
 							
 							cell = new LinearLayout(ctx);
-							cell.setBackgroundColor(Color.WHITE);
+							cell.setBackgroundColor(Color.GRAY);
 							cell.setLayoutParams(llp);//2px border on the right for the cell
 							tv = new TextView(ctx);
 							tv.setText(entry.getDesc());
-							tv.setPadding(0, 0, 4, 3);
+							//tv.setPadding(0, 0, 4, 3);
 							cell.addView(tv);
 							tr.addView(cell);
 							
 							cell = new LinearLayout(ctx);
-							cell.setBackgroundColor(Color.WHITE);
+							cell.setBackgroundColor(Color.GRAY);
 							cell.setLayoutParams(llp);//2px border on the right for the cell
 							tv = new TextView(ctx);
 							tv.setText(entry.getAmount());
-							tv.setPadding(0, 0, 4, 3);
+							//tv.setPadding(0, 0, 4, 3);
 							cell.addView(tv);
 							tr.addView(cell);
 							
 							cell = new LinearLayout(ctx);
-							cell.setBackgroundColor(Color.WHITE);
+							cell.setBackgroundColor(Color.GRAY);
 							cell.setLayoutParams(llp);//2px border on the right for the cell
 							tv = new TextView(ctx);
 							tv.setText(entry.getPayee());
-							tv.setPadding(0, 0, 4, 3);
+							//tv.setPadding(0, 0, 4, 3);
 							cell.addView(tv);
 							tr.addView(cell);
 							
 							cell = new LinearLayout(ctx);
-							cell.setBackgroundColor(Color.WHITE);
+							cell.setBackgroundColor(Color.GRAY);
 							cell.setLayoutParams(llp);//2px border on the right for the cell
 							tv = new TextView(ctx);
 							tv.setText(entry.getDiv());
-							tv.setPadding(0, 0, 4, 3);
+							//tv.setPadding(0, 0, 4, 3);
 							cell.addView(tv);
 							tr.addView(cell);
 							
 							table.addView(tr);
-							
-							//RowEntries.add(entry);
-							// entriesAdapter.notifyDataSetChanged();
 						}
 
 					} catch (ParseException | JSONException | IOException e) {
@@ -576,12 +598,12 @@ public class MainActivity extends SalesforceActivity {
 
 			@Override
 			public void onError(Exception exception) {
-				// Toast.makeText(
-				// MainActivity.,
-				// MainActivity.this.getString(SalesforceSDKManager
-				// .getInstance().getSalesforceR()
-				// .stringGenericError(), exception.toString()),
-				// Toast.LENGTH_LONG).show();
+//				 Toast.makeText(
+//				 ctx,
+//				 MainActivity.this.getString(SalesforceSDKManager
+//				 .getInstance().getSalesforceR()
+//				 .stringGenericError(), exception.toString()),
+//				 Toast.LENGTH_LONG).show();
 				progress.dismiss();
 				resetUI();
 			}

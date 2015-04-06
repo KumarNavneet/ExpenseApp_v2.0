@@ -27,7 +27,8 @@
             android:id="@+id/datePicker1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp" />
+            android:layout_margin="2dp"
+            android:datePickerMode="spinner" />
 
         <TextView
             android:id="@+id/textView3"
@@ -187,8 +188,6 @@
                 android:layout_margin="2dp"
                 android:text="@string/Reset" />
         </LinearLayout>
-
-       
     </LinearLayout>
 
 </ScrollView>
