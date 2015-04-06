@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="account_type">com.personal.expenseapp.login</string>
+    <string name="app_name"><b>ExpenseApp_v2.0</b></string>
+    <string name="app_package">com.personal.expenseapp</string>
+    <string name="welcome">Welcome</string>
+    <string name="logout_button">Logout</string>
+    <string name="fetch_contacts_button">Fetch Contacts</string>
+    <string name="fetch_accounts_button">Fetch Accounts</string>
+    <string name="clear_button">Clear</string>
+    <string name="Name">Name:</string>
+    <string name="Date">Date:</string>
+    <string name="PaidBy">Paid By:</string>
+    <string name="Arunjay">Arunjay</string>
+    <string name="Gyanendra">Gyanendra</string>
+    <string name="Navneet">Navneet</string>
+    <string name="Nirmal">Nirmal</string>
+    <string name="Saurabh">Saurabh</string>
+    <string name="Details">Details:</string>
+    <string name="Amount">Amount:</string>
+    <string name="division">To be divided among:</string>
+    <string name="RecentEntries">Tap to get RecentEntries</string>
+    <string name="Ok">Ok</string>
+    <string name="Reset">Reset</string>
+    <string name="desc_list_item_icon">desc. of list item icon</string>
+
+    <string-array name="nav_drawer_items">
+        <item>Home</item>
+        <item>Recent Entries</item>
+        <item>All Entries</item>
+        <item>My Recent Expenses</item>
+        <item>My All Expenses</item>
+    </string-array>
+
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_list_item</item>
+        <item>@drawable/ic_list_item</item>
+        <item>@drawable/ic_list_item</item>
+        <item>@drawable/ic_list_item</item>
+        <item>@drawable/ic_refresh</item>
+    </array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+</resources>

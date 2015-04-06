@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="remoteAccessConsumerKey">3MVG9Y6d_Btp4xp6xNP2f7N._BSJ9c1Pcfj9TGHC8Y0FjlGraEgfseX9C_2xK8qJ5uDDk1IoateGHOB9pTxPq</string>
+    <string name="oauthRedirectURI">navneet://success</string>
+    <string-array name="oauthScopes">
+        <item>api</item>
+    </string-array>
+    <string name="androidPushNotificationClientId"></string>
+</resources>
